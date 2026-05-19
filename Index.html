@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus in Animal Husbandry | Ayam Kampung Growth</title>
+    <!-- Tailwind CSS for modern, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for the interactive graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom animations for UI elements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-emerald-700 text-white p-6 shadow-md">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-2xl md:text-3xl font-bold">Calculus in Animal Husbandry Technology</h1>
+            <p class="text-emerald-100 mt-2 text-sm md:text-base">Applying Derivatives f'(x) to Ayam Kampung Kacukan Growth Dynamics</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left Column: Explanation and Formulas -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold text-emerald-800 mb-3">The Bioscience Scenario</h2>
+                <p class="text-sm text-gray-600 mb-3 text-justify">
+                    As an Animal Husbandry Technologist, you need to optimize feed efficiency. An animal doesn't grow at the same speed its whole life. By finding the <strong>derivative</strong> of the growth curve, we determine the exact <em>Rate of Weight Gain</em>. This tells us when the chicken is converting feed to muscle fastest (peak growth) and when growth slows down, signaling it's time for market.
+                </p>
+                <div class="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-200">
+                    <strong>Data Source Context:</strong> Realistically modeled cubic regression based on growth performance benchmarks from the <em>Department of Veterinary Services (DVS) Malaysia</em> and poultry research journals from <em>Universiti Putra Malaysia (UPM)</em> for Ayam Kampung Kacukan (0-12 weeks).
+                </div>
+            </div>
+
+            <div class="bg-emerald-50 p-5 rounded-xl shadow-sm border border-emerald-100">
+                <h2 class="text-lg font-bold text-emerald-900 mb-4">The Mathematical Models</h2>
+                
+                <div class="mb-4">
+                    <p class="text-sm font-semibold text-gray-700">1. Body Weight Function, W(t)</p>
+                    <p class="text-xs text-gray-600 mb-1">Total weight in grams at week <em>t</em>.</p>
+                    <div class="bg-white p-3 rounded font-mono text-sm text-center border border-emerald-200">
+                        W(t) = -0.5t<sup>3</sup> + 15t<sup>2</sup> + 40t + 40
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-semibold text-gray-700">2. Growth Rate (Derivative), W'(t)</p>
+                    <p class="text-xs text-gray-600 mb-1">Grams gained per week at week <em>t</em>.</p>
+                    <div class="bg-white p-3 rounded font-mono text-sm text-center border border-emerald-200 text-blue-700 font-bold">
+                        W'(t) = -1.5t<sup>2</sup> + 30t + 40
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile instruction -->
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 lg:hidden block">
+                <p class="text-sm text-blue-800 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                    Tap on the graph data points to calculate the derivative!
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Column: Chart and Interaction Result -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Chart Container -->
+            <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 relative">
+                <h3 class="text-center font-bold text-gray-700 mb-2">Ayam Kampung Kacukan Growth Curve</h3>
+                <p class="text-center text-xs text-gray-500 mb-4 hidden lg:block">Click any point on the green curve to calculate its derivative (tangent line) and see the bioscience analysis.</p>
+                <div class="relative h-[300px] md:h-[400px] w-full">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Dynamic Result Panel -->
+            <div id="resultPanel" class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500 hidden opacity-0 transition-opacity duration-300">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Analysis at Week <span id="resWeek" class="text-blue-600"></span></h3>
+                        <p class="text-gray-500 text-sm">Total Body Weight: <span id="resWeight" class="font-bold text-gray-700"></span> grams</p>
+                    </div>
+                    <div class="mt-3 md:mt-0 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 text-center">
+                        <p class="text-xs text-blue-600 uppercase font-bold tracking-wide">Derivative / Growth Rate</p>
+                        <p class="text-2xl font-black text-blue-700">f'(x) = <span id="resRate"></span> <span class="text-sm font-normal text-blue-600">g/week</span></p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-gray-700 text-sm uppercase tracking-wider mb-2">Bioscience Application (Layman Explanation)</h4>
+                    <p id="resExplanation" class="text-gray-600 leading-relaxed text-sm md:text-base"></p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center p-6 text-gray-400 text-sm mt-8">
+        Designed for SFH Animal Husbandry Technology Students &bull; Applied Calculus
+    </footer>
+
+    <script>
+        // 1. Define the mathematical functions
+        // Total Weight Function: W(t) = -0.5t^3 + 15t^2 + 40t + 40
+        function calculateWeight(t) {
+            return (-0.5 * Math.pow(t, 3)) + (15 * Math.pow(t, 2)) + (40 * t) + 40;
+        }
+
+        // Derivative (Growth Rate) Function: W'(t) = -1.5t^2 + 30t + 40
+        function calculateDerivative(t) {
+            return (-1.5 * Math.pow(t, 2)) + (30 * t) + 40;
+        }
+
+        // 2. Generate Data for Weeks 0 to 12
+        const weeks = [];
+        const weights = [];
+        for (let t = 0; t <= 12; t++) {
+            weeks.push(t);
+            weights.push(calculateWeight(t));
+        }
+
+        // 3. Setup Chart.js
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        let growthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: weeks,
+                datasets: [
+                    {
+                        label: 'Total Weight W(t) [grams]',
+                        data: weights,
+                        borderColor: '#10b981', // Emerald 500
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#047857',
+                        pointRadius: 6,
+                        pointHoverRadius: 10,
+                        pointHoverBackgroundColor: '#10b981',
+                        fill: true,
+                        tension: 0.4 // Smooth curve
+                    },
+                    {
+                        // Hidden dataset used for drawing the tangent line dynamically
+                        label: "Tangent Line (Derivative f'(x))",
+                        data: [],
+                        borderColor: '#3b82f6', // Blue 500
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutQuart'
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: true,
+                },
+                plugins: {
+                    tooltip: {
+                        backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                if (context.datasetIndex === 0) {
+                                    return `Weight: ${context.parsed.y.toFixed(0)} g`;
+                                }
+                                return ''; // Don't show tooltip for tangent line
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: { usePointStyle: true, boxWidth: 8 }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear', // Use linear scale for precise tangent drawing
+                        title: { display: true, text: 'Time (Weeks)', font: { weight: 'bold' } },
+                        ticks: { stepSize: 1, max: 12, min: 0 }
+                    },
+                    y: {
+                        title: { display: true, text: 'Body Weight (grams)', font: { weight: 'bold' } },
+                        suggestedMin: 0,
+                        suggestedMax: 2000
+                    }
+                },
+                // Handle User Clicks
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const clickedDatasetIndex = elements[0].datasetIndex;
+                        // Only react if they click the main curve
+                        if(clickedDatasetIndex === 0) {
+                            const dataIndex = elements[0].index;
+                            const t = weeks[dataIndex];
+                            processClick(t);
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. Logic to process clicks, calculate derivatives, and update UI
+        function processClick(t) {
+            const weight = calculateWeight(t);
+            const rateOfChange = calculateDerivative(t);
+
+            // Calculate Tangent Line Points to animate on the chart
+            // Equation of line: y - y1 = m(x - x1) -> y = m(x - t) + weight
+            // We draw the line from t-2 to t+2 for visualization
+            const xStart = Math.max(0, t - 2);
+            const xEnd = Math.min(12, t + 2);
+            const yStart = rateOfChange * (xStart - t) + weight;
+            const yEnd = rateOfChange * (xEnd - t) + weight;
+
+            growthChart.data.datasets[1].data = [
+                { x: xStart, y: yStart },
+                { x: t, y: weight }, // Touch the curve exactly
+                { x: xEnd, y: yEnd }
+            ];
+            growthChart.update(); // Re-render chart with new tangent line
+
+            // Update DOM UI
+            document.getElementById('resWeek').innerText = t;
+            document.getElementById('resWeight').innerText = weight.toFixed(0);
+            document.getElementById('resRate').innerText = rateOfChange.toFixed(1);
+
+            // Generate Bioscience Layman Explanation based on derivative (f'(x))
+            let explanation = "";
+            
+            if (t === 0) {
+                explanation = "<strong>Hatching Phase:</strong> The chick has just hatched. The derivative is 40g/week, meaning the initial growth machinery is just starting. The focus right now is providing warmth (brooding) and highly digestible Starter Crumbles to establish gut health.";
+            } else if (t > 0 && t < 5) {
+                explanation = `<strong>Early Growth (Acceleration):</strong> The derivative is positive and increasing week by week (currently at ${rateOfChange.toFixed(0)}g/week). The chicken's digestive tract and bone structure are rapidly expanding. <em>Action:</em> Continue feeding high-protein (20-22% CP) Starter feed to support this accelerating growth curve.`;
+            } else if (t >= 5 && t < 10) {
+                explanation = `<strong>Rapid Growth Phase (Steepest Slope):</strong> Look at the steep tangent line! The derivative is incredibly high. The animal is converting feed into muscle mass at an optimal rate. <em>Action:</em> Transition to Grower feed (16-18% CP). Environmental stress must be minimized now, as any disruption will severely impact this rapid weight gain.`;
+            } else if (t === 10) {
+                // The inflection point is where second derivative W''(t) = -3t + 30 = 0 -> t = 10.
+                explanation = `<strong>The Inflection Point (Maximum Growth Rate):</strong> Mathematically, the second derivative $f''(x) = 0$ here. This means the chicken has hit its absolute maximum growth speed of ${rateOfChange.toFixed(0)}g/week! After this week, it will still grow, but the <em>speed</em> of growth will begin to slow down.`;
+            } else if (t > 10) {
+                explanation = `<strong>Maturation Phase (Decelerating Growth):</strong> The derivative is still positive (the chicken is still getting heavier), but the number is shrinking. The tangent line is flattening out. The bird is depositing more fat than muscle now. <em>Action:</em> Switch to Finisher feed. As an agricultural technologist, this slowing derivative tells you it is almost time to harvest, as the Feed Conversion Ratio (FCR) is becoming less economically efficient.`;
+            }
+
+            document.getElementById('resExplanation').innerHTML = explanation;
+
+            // Show panel with animation
+            const panel = document.getElementById('resultPanel');
+            panel.classList.remove('hidden');
+            // Small hack to restart CSS animation
+            panel.classList.remove('fade-in');
+            void panel.offsetWidth; 
+            panel.classList.add('fade-in');
+        }
+
+        // Optional: Trigger click on week 10 (inflection point) initially so the page isn't empty
+        setTimeout(() => {
+            processClick(10);
+        }, 1000); // wait for initial chart animation
+    </script>
+</body>
+</html>
